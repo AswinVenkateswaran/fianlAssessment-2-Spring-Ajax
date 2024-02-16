@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container" >
+                    <input type="hidden" id="eid" />
+      Employee Name :<input type="text" name="ename" id="ename" class="form-control w-250" />
+      AddressLine1 :<input type="text" name="address1" id="address1" class="form-control w-250" />
+      AddressLine2: <input type="text" name="address2" id="address2" class="form-control w-250" />
+      City :<input type="text" name="ecity" id="ecity" class="form-control w-250" />
+      ZipCode :<input type="text" name="ezipcode" id="ezipcode" class="form-control w-250" />
+
+<button class="btn btn-primary" onclick="updateEmployee()" >update</button>
+</div>
+<script>
+    $(document).ready(function (){
+        var id = localStorage.getItem("upId");
+
+        $.ajax({
+            url:"http://localhost:8080/employee/get/"+id,
+            type:"GET",
+            contentType:'application/json',
+            success:function(res){
+                $('#eid').attr('value',res.empId);
+                $('#ename').attr('value',res.empName);
+                $('#address1').attr('value',res.addressLine1);
+                $('#address2').attr('value',res.addressLine2);
+                $('#ecity').attr('value',res.city);
+                $('#ezipcode').attr('value',res.zipCode);
+            }
+        })
+    })
+
+    function updateEmployee(){
+        $.ajax({
+            url:"http://localhost:8080/employee/update",
+            type:"PUT",
+            contentType:'application/json',
+            data: JSON.stringify({
+                empId: $('#eid').val(),
+                empName: $('#ename').val(),
+                addressLine1: $('#address1').val(),
+                addressLine2: $('#address2').val(),
+                city:$('#ecity').val(),
+                zipCode:$('#ezipcode').val()
+            }),
+            success:function(res){
+                alert("Employee updated Successfully....");
+                goToIndex();
+            }
+        })
+    }
+
+    function goToIndex(){
+        window.location.href="index.html";
+    }
+</script>
+</body>
+</html>
